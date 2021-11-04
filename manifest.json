@@ -3,15 +3,15 @@
   "name": "Llaminator",
   "icons": [
     {
-      "src": "/icon.png",
+      "src": "/llaminator/icon.png",
       "type": "image/png",
       "sizes": "512x512",
       "purposes": "any maskable"
     }
   ],
-  "start_url": "/",
+  "start_url": "/llaminator/",
   "background_color": "#3367D6",
   "display": "standalone",
-  "scope": "/",
+  "scope": "/llaminator/",
   "theme_color": "#3367D6"
 }

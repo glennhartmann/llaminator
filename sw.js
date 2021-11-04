@@ -25,11 +25,11 @@ self.addEventListener('install', function (event) {
     caches.open(cacheName).then(function (cache) {
       return cache.addAll([
         workboxAddr, // TODO: is this actually necessary?
-        '/',
-        '/index.html',
-        '/index.js',
-        '/manifest.json',
-        '/sw.js',
+        '/llaminator/',
+        '/llaminator/index.html',
+        '/llaminator/index.js',
+        '/llaminator/manifest.json',
+        '/llaminator/sw.js',
       ]);
     }),
   );
