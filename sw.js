@@ -30,6 +30,7 @@ self.addEventListener('install', function (event) {
         '/llaminator/index.js',
         '/llaminator/manifest.json',
         '/llaminator/sw.js',
+        '/llaminator/icon.png',
       ]);
     }),
   );
