@@ -6,7 +6,7 @@
       "src": "/llaminator/icon.png",
       "type": "image/png",
       "sizes": "512x512",
-      "purposes": "any maskable"
+      "purpose": "any maskable"
     }
   ],
   "start_url": "/llaminator/",
