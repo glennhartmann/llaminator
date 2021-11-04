@@ -3,32 +3,15 @@
   "name": "Llaminator",
   "icons": [
     {
-      "src": "/TODO",
+      "src": "/icon.png",
       "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "/TODO",
-      "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purposes": "any maskable"
     }
   ],
   "start_url": "/",
   "background_color": "#3367D6",
   "display": "standalone",
   "scope": "/",
-  "theme_color": "#3367D6",
-  "description": "TODO",
-  "screenshots": [
-    {
-      "src": "/TODO",
-      "type": "image/png",
-      "sizes": "540x720"
-    },
-    {
-      "src": "/TODO",
-      "type": "image/jpg",
-      "sizes": "540x720"
-    }
-  ]
+  "theme_color": "#3367D6"
 }
