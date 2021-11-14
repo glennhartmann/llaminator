@@ -13,5 +13,21 @@
   "background_color": "#3367D6",
   "display": "standalone",
   "scope": "/llaminator/",
-  "theme_color": "#3367D6"
+  "theme_color": "#3367D6",
+  "share_target": {
+    "action": "/llaminator/share-target",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "url": "url",
+      "text": "text",
+      "files": [
+        {
+          "name": "image",
+          "accept": ["image/*"]
+        }
+      ]
+    }
+  }
 }
