@@ -23,7 +23,7 @@ import { replaceConfig } from './build_common.mjs';
 
 const outDir = 'dist';
 const entryFileNamesPattern = '[name].ts';
-const replacePluginInstance = replace(replaceConfig(''));
+const replacePluginInstance = replace(replaceConfig('/llaminator'));
 
 export default [
   {
@@ -31,7 +31,7 @@ export default [
     output: {
       dir: outDir,
       sourcemap: true,
-      entryFileNames: entryFileNamesPattern,
+      //entryFileNames: entryFileNamesPattern,
     },
     plugins: [
       clear({ targets: [outDir] }),
@@ -53,7 +53,7 @@ export default [
     output: {
       dir: outDir,
       sourcemap: true,
-      entryFileNames: entryFileNamesPattern,
+      //entryFileNames: entryFileNamesPattern,
     },
     plugins: [
       replacePluginInstance,
