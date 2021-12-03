@@ -3,19 +3,18 @@
   "name": "Llaminator",
   "icons": [
     {
-      "src": "/llaminator/icon.png",
+      "src": "icon.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any maskable"
     }
   ],
-  "start_url": "/llaminator/",
+  "start_url": ".",
   "background_color": "#3367D6",
   "display": "standalone",
-  "scope": "/llaminator/",
   "theme_color": "#3367D6",
   "share_target": {
-    "action": "/llaminator/share-target",
+    "action": "share-target",
     "method": "POST",
     "enctype": "multipart/form-data",
     "params": {
