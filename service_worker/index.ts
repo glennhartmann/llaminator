@@ -14,8 +14,9 @@
  *  limitations under the License.
  */
 
-import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
+import { precacheAndRoute } from 'workbox-precaching';
+import { registerRoute } from 'workbox-routing';
 
 const cacheName = 'app-cache';
 
@@ -25,24 +26,10 @@ const mainImageName = 'mainImage';
 
 declare var self: ServiceWorkerGlobalScope;
 
-self.addEventListener('install', function (event): void {
-  // precache all assets
-  event.waitUntil(
-    caches.open(cacheName).then(function (cache) {
-      return cache.addAll([
-        '__APP_ROOT__/',
-        '__APP_ROOT__/index.html',
-        '__APP_ROOT__/index.js',
-        '__APP_ROOT__/manifest.json',
-        '__APP_ROOT__/sw.js',
-        '__APP_ROOT__/icon.png',
-      ]);
-    }),
-  );
-});
+precacheAndRoute(self.__WB_MANIFEST);
 
 registerRoute(
-  ({url}) => url.pathname === '__APP_ROOT__/share-target',
+  ({url}) => url.pathname.endsWith('/share-target'),
   async ({request}) => {
     const data = await request.formData();
 
@@ -69,7 +56,7 @@ registerRoute(
 
     // TODO: handle invalid share
     storeFile(data.get('image') as File, dbOpenRequest!);
-    return Response.redirect('__APP_ROOT__/index.html', 302);
+    return Response.redirect('/', 302);
   },
   'POST'
 );
