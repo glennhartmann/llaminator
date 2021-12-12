@@ -10,9 +10,9 @@
     }
   ],
   "start_url": ".",
-  "background_color": "#3367D6",
+  "background_color": "#ffc400",
   "display": "standalone",
-  "theme_color": "#3367D6",
+  "theme_color": "#e91e63",
   "share_target": {
     "action": "share-target",
     "method": "POST",
