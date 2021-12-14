@@ -18,6 +18,7 @@ import '@material/mwc-top-app-bar-fixed';
 
 import './components/llama-select-fab';
 import './llaminator.css';
+import * as storage from './storage';
 
 if ('serviceWorker' in navigator && process.env.NODE_ENV !== 'development') {
   window.addEventListener('load', () => {
@@ -27,10 +28,6 @@ if ('serviceWorker' in navigator && process.env.NODE_ENV !== 'development') {
   // TODO display error message and fail gracefully
 }
 
-const mainDBName = 'appDB';
-const objStoreName = 'imageStore';
-const mainImageName = 'mainImage';
-
 window.addEventListener('load', () => {
   const fileInput = document.querySelector('#input') as HTMLElement;
   const imgElement = document.querySelector('img') as HTMLImageElement;
@@ -38,70 +35,52 @@ window.addEventListener('load', () => {
 
   if (!window.indexedDB || !window.URL) { /* TODO: display error message */ }
 
-  const dbOpenRequest = window.indexedDB.open(mainDBName);
-  dbOpenRequest.addEventListener('success', (e) => onDBOpenSuccess(e, imgElement, shareBtn));
-  dbOpenRequest.addEventListener('error', (e) => {
-    console.log('error loading db:', e);
-    // TODO: display error
-  });
-  dbOpenRequest.addEventListener('upgradeneeded', (e) => {
-    console.log(`DB update request:`, e);
-    (e.target as IDBRequest).result.createObjectStore(objStoreName);
-  });
+  const dbPromise = storage.LlamaStorage.create();
+  dbPromise.then((db) => onDBOpenSuccess(db, imgElement, shareBtn));
 
-  fileInput.addEventListener('fileselected', (e) => onFileInputChange(e as CustomEvent, dbOpenRequest, imgElement, shareBtn));
+  fileInput.addEventListener('fileselected', (e) => onFileInputChange(e as CustomEvent, dbPromise, imgElement, shareBtn));
 
   shareBtn.addEventListener('click', async () => {
-    const blob = await fetch(imgElement.src).then(r => r.blob());
-    const f = fileFromBlob(blob);
+    const f = await fileFromID(await dbPromise, storage.mainImageName /* TODO: support multiple */);
     navigator.share({files: [f]});
   });
 });
 
-function onDBOpenSuccess(e: Event, imgElement: HTMLImageElement, shareBtn: HTMLButtonElement) {
-  console.log('Database initialized');
-
-  const db = (e.target as IDBRequest).result;
-  const t = db.transaction(objStoreName, 'readonly').objectStore(objStoreName).get(mainImageName);
-  t.addEventListener('success', (e: Event) => {
-    console.log('get success:', e)
-    const b = (e.target as IDBRequest).result;
-    if (!b) return;
+async function onDBOpenSuccess(db: storage.LlamaStorage, imgElement: HTMLImageElement, shareBtn: HTMLButtonElement) {
+  try {
+    const b = await db.getFile(storage.mainImageName /* TODO: support multiple */);
     imgElement.src = window.URL.createObjectURL(b);
-    displayIfShareEnabled(shareBtn, b);
-  });
-  t.addEventListener('error', (e: Event) => {
-    console.log('get error:', e)
-  });
+    displayIfShareEnabled(shareBtn, db);
+  } catch {}
 }
 
-async function onFileInputChange(e: CustomEvent, dbOpenRequest: IDBOpenDBRequest, imgElement: HTMLImageElement, shareBtn: HTMLButtonElement) {
+async function onFileInputChange(e: CustomEvent, dbPromise: Promise<storage.LlamaStorage>, imgElement: HTMLImageElement, shareBtn: HTMLButtonElement) {
+  const db = await dbPromise;
   const f = e.detail as File;
   const b = new Blob([await f.arrayBuffer()], { type: f.type });
   // TODO: perhaps prompt before silently replacing old image, if one exists?
   imgElement.src = window.URL.createObjectURL(b);
-  displayIfShareEnabled(shareBtn, b);
-  const t = dbOpenRequest.result.transaction(objStoreName, 'readwrite').objectStore(objStoreName).put(b, mainImageName);
-  // TODO: display "saving..." message/spinner?
-  t.addEventListener('success', (e) => {
-    console.log('put success:', e)
-  });
-  t.addEventListener('error', (e) => {
-    console.log('put error:', e)
-    // TODO: display error
-  });
+  const recordReady = db.add(b, {
+    filename: f.name,
+    mimeType: f.type,
+    // title: '',
+  }); // TODO: or update()
+  console.log(`storing image as id ${recordReady.fileRecord.id} (may not be finished saving yet)`)
+  recordReady.ready.then(() => displayIfShareEnabled(shareBtn, db));
   // TODO: add option to remove from storage
 }
 
-function displayIfShareEnabled(target: HTMLElement, blob: Blob): void {
-  const f = fileFromBlob(blob);
+async function displayIfShareEnabled(target: HTMLElement, db: storage.LlamaStorage): Promise<void> {
+  const f = await fileFromID(db, storage.mainImageName /* TODO: support multiple */);
   if ('share' in navigator && 'canShare' in navigator &&
       navigator.canShare({files: [f]})) {
     target.style.display = 'block';
   }
 }
 
-function fileFromBlob(blob: Blob): File {
-  return new File([blob], "name.png" /* TODO - name? Maybe we should be storing a File instead of a Blob? */,
-    {type: "image/png"});
+async function fileFromID(db: storage.LlamaStorage, id: storage.FileUniqueID): Promise<File> {
+  const record = await db.get(id);
+  const blob = await db.getFile(id);
+  return new File([blob], record.metadata.filename,
+    {type: record.metadata.mimeType});
 }
