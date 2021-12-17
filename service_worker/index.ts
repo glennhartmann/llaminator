@@ -17,6 +17,7 @@
 import { StaleWhileRevalidate } from 'workbox-strategies';
 import { precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
+import * as storage from '../src/storage'; // TODO: move this to a more common place?
 
 const cacheName = 'app-cache';
 
@@ -35,45 +36,24 @@ registerRoute(
 
     if (!indexedDB) { /* TODO: display error message */ }
 
-    let dbOpenRequest: IDBOpenDBRequest | null = null;
-    await new Promise<void>((resolve, reject) => {
-      // TODO: consider using https://github.com/jakearchibald/idb
-      dbOpenRequest = indexedDB.open(mainDBName);
-      dbOpenRequest.addEventListener('success', () => {
-        console.log('Database initialized');
-        resolve();
-      });
-      dbOpenRequest.addEventListener('error', (e) => {
-        console.log('error loading db:', e);
-        // TODO: display error
-        reject();
-      });
-      dbOpenRequest.addEventListener('upgradeneeded', (e: IDBVersionChangeEvent) => {
-        console.log(`DB update request:`, e);
-        (e.target as IDBOpenDBRequest).result.createObjectStore(objStoreName);
-      });
-    });
-
     // TODO: handle invalid share
-    storeFile(data.get('image') as File, dbOpenRequest!);
+    storeFile(data.get('image') as File, await storage.LlamaStorage.create());
     return Response.redirect('/', 302);
   },
   'POST'
 );
 
-async function storeFile(f: File, dbOpenRequest: IDBOpenDBRequest) {
+async function storeFile(f: File, db: storage.LlamaStorage) {
   const b = new Blob([await f.arrayBuffer()], { type: f.type });
   // TODO: perhaps prompt before silently replacing old image, if one exists?
-  const t = dbOpenRequest.result.transaction(objStoreName, 'readwrite').objectStore(objStoreName).put(b, mainImageName);
+  const recordReady = db.add(b, {
+    filename: f.name,
+    mimeType: f.type,
+    // title: '',
+  }); // TODO: or update()
   // TODO: display "saving..." message/spinner?
-  t.addEventListener('success', (e: Event) => {
-    console.log('put success:', e)
-  });
-  t.addEventListener('error', (e: Event) => {
-    console.log('put error:', e)
-    // TODO: display error
-  });
-  // TODO: add option to remove from storage
+  console.log(`storing image as id ${recordReady.fileRecord.id} (may not be finished saving yet)`)
+  await recordReady.ready;
 }
 
 registerRoute(
