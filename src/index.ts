@@ -14,10 +14,9 @@
  *  limitations under the License.
  */
 
-import '@material/mwc-top-app-bar-fixed';
-
+import './components/llama-header';
 import './components/llama-select-fab';
-import './llaminator.css';
+import './llaminator.scss';
 import { LlamaStorage, kMainImageName, FileUniqueID } from './storage';
 
 if ('serviceWorker' in navigator && process.env.NODE_ENV !== 'development') {
@@ -42,16 +41,16 @@ window.addEventListener('load', () => {
 
   shareBtn.addEventListener('click', async () => {
     const file = await fileFromID(await dbPromise, kMainImageName /* TODO: support multiple */);
+    if (!file) return; // TODO: show error message
     navigator.share({files: [file]});
   });
 });
 
 async function onDBOpenSuccess(db: LlamaStorage, imgElement: HTMLImageElement, shareBtn: HTMLButtonElement) {
-  try {
-    const blob = await db.getFile(kMainImageName /* TODO: support multiple */);
-    imgElement.src = window.URL.createObjectURL(blob);
-    displayIfShareEnabled(shareBtn, db);
-  } catch {}
+  const blob = await db.getFile(kMainImageName /* TODO: support multiple */);
+  if (!blob) return;
+  imgElement.src = window.URL.createObjectURL(blob);
+  displayIfShareEnabled(shareBtn, db);
 }
 
 async function onFileInputChange(e: CustomEvent, dbPromise: Promise<LlamaStorage>, imgElement: HTMLImageElement, shareBtn: HTMLButtonElement) {
@@ -72,15 +71,17 @@ async function onFileInputChange(e: CustomEvent, dbPromise: Promise<LlamaStorage
 
 async function displayIfShareEnabled(target: HTMLElement, db: LlamaStorage): Promise<void> {
   const file = await fileFromID(db, kMainImageName /* TODO: support multiple */);
+  if (!file) return;
   if ('share' in navigator && 'canShare' in navigator &&
       navigator.canShare({files: [file]})) {
     target.style.display = 'block';
   }
 }
 
-async function fileFromID(db: LlamaStorage, id: FileUniqueID): Promise<File> {
+async function fileFromID(db: LlamaStorage, id: FileUniqueID): Promise<File | undefined> {
   const record = await db.get(id);
   const blob = await db.getFile(id);
+  if (!record || !blob) return undefined;
   return new File([blob], record.metadata.filename,
     {type: record.metadata.mimeType});
 }
