@@ -14,28 +14,19 @@
  *  limitations under the License.
  */
 
-@use '@material/fab/mdc-fab';
-@use '@material/top-app-bar/mdc-top-app-bar';
+// Building the website and starting the server takes ~7 seconds on a MacBook Pro.
+jest.setTimeout(15000);
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+describe('Homepage', () => {
+  beforeAll(async () => {
+    // The port here must match that in //jest-puppeteer.config.js.
+    await page.goto('http://localhost:8888', { 'waitUntil': 'domcontentloaded' });
+  })
 
-html {
-  --mdc-theme-primary: #e91e63;
-  --mdc-theme-secondary: #ffc400;
-}
-
-html, body {
-  width: 100%;
-  height: 100%;
-}
-
-llama-select-fab {
-  position: absolute;
-  display: block;
-  bottom: 32px;
-  right: 32px;
-}
+  it('says Llaminator', async () => {
+    // Note: There is a bug with puppeteer/jest-puppeteer that will cause this test to
+    // fail if run with puppeteer 13.
+    // See https://github.com/smooth-code/jest-puppeteer/issues/461.
+    await expect(page).toMatch('Llaminator');
+  })
+})

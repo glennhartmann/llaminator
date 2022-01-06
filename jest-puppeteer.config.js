@@ -14,28 +14,9 @@
  *  limitations under the License.
  */
 
-@use '@material/fab/mdc-fab';
-@use '@material/top-app-bar/mdc-top-app-bar';
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  --mdc-theme-primary: #e91e63;
-  --mdc-theme-secondary: #ffc400;
-}
-
-html, body {
-  width: 100%;
-  height: 100%;
-}
-
-llama-select-fab {
-  position: absolute;
-  display: block;
-  bottom: 32px;
-  right: 32px;
+module.exports = {
+  server: {
+    command: 'npx webpack serve --port 8888 --mode=production',
+    port: 8888
+  },
 }
