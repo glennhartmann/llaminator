@@ -37,7 +37,7 @@ window.addEventListener('load', () => {
   if (!window.indexedDB || !window.URL) { /* TODO: display error message */ }
 
   const dbPromise = LlamaStorage.create();
-  dbPromise.then(async db => {
+  dbPromise.then(async (db) => {
     const id = await db.getCurrentID();
     if (!id) return;
 
@@ -47,14 +47,14 @@ window.addEventListener('load', () => {
     createOrReplaceVisibleItem(mainElement, dbPromise, id, URL.createObjectURL(blob));
   });
 
-  fileInput.addEventListener('fileselected', e =>
-      onFileInputChange(e as CustomEvent, mainElement, dbPromise));
+  fileInput.addEventListener('fileselected', (e) =>
+    onFileInputChange(e as CustomEvent, mainElement, dbPromise));
 });
 
 function createOrReplaceVisibleItem(container: HTMLElement,
-                                    dbPromise: Promise<LlamaStorage>,
-                                    id: string,
-                                    src: string): void {
+    dbPromise: Promise<LlamaStorage>,
+    id: string,
+    src: string): void {
   // TODO: Support displaying any number of stored items in Llaminator. For now,
   // remove all existing content from the |container| to ensure that only a
   // single item is displayed.
@@ -78,7 +78,7 @@ async function onFileInputChange(e: CustomEvent, container: HTMLElement, dbPromi
     // title: '',
   }); // TODO: or update()
 
-  console.log(`stored image as id ${fileRecord.id}`)
+  console.log(`stored image as id ${fileRecord.id}`);
 
   // TODO: perhaps prompt before silently replacing old image, if one exists?
   createOrReplaceVisibleItem(container, dbPromise, fileRecord.id, URL.createObjectURL(blob));
