@@ -47,12 +47,12 @@ export class LlamaItem extends LitElement {
       return;
     }
 
-    const file = new File([ blob ], record.metadata.filename, {
+    const file = new File([blob], record.metadata.filename, {
       type: record.metadata.mimeType,
     });
 
-    if (navigator.canShare({ files: [ file ] })) {
-      navigator.share({ files: [ file ] });
+    if (navigator.canShare({ files: [file] })) {
+      navigator.share({ files: [file] });
     }
   }
 
@@ -60,7 +60,7 @@ export class LlamaItem extends LitElement {
     return html`
       <div class="mdc-card">
         <div class="mdc-card__primary-action">
-          <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url(${this.src})">
+          <div class="mdc-card__media mdc-card__media--16-9 llama-card-media" style="background-image: url(${this.src})">
           </div>
           <!-- TODO: Display filename/date/time information? -->
           <!-- TODO: Add a ripple effect -->

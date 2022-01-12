@@ -43,9 +43,20 @@ main {
   padding-top: calc(2rem + 64px) !important;
 }
 
+llama-item {
+  margin-bottom: 2rem;
+
+  /** TODO: Use a stack based on flexbox */
+  display: block;
+}
+
 llama-select-fab {
   position: absolute;
   display: block;
   bottom: 32px;
   right: 32px;
+}
+
+.llama-card-media {
+  background-size: contain;
 }
