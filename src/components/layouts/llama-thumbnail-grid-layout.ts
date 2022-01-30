@@ -14,6 +14,7 @@
  *  limitations under the License.
  */
 
+import { css } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
 import { LlamaVerticalScrollLayout } from './llama-vertical-scroll-layout';
@@ -23,12 +24,18 @@ import { LlamaVerticalScrollLayout } from './llama-vertical-scroll-layout';
  * Renders all items at once (downscaled) in a dynamically-sized grid.
  */
 export class LlamaThumbnailGridLayout extends LlamaVerticalScrollLayout {
-  // TODO: it would be nice to specify the CSS as part of the element, rather than in the global
-  // css file - otherwise the only point of this class is to get the element name in the DOM.
-  // I'm sure there's got to be a way to make the llama-item children work even if this element
-  // has a shadow root (@import url(../llaminator.css) _almost_ works).
-  //
   // TODO: if we want to get really serious about optimizing this layout, we may eventually want
   // to consider actually storing thumbnails in the db, rather than having the page scale N images
   // on-the-fly.
+
+  static styles = css`
+      :host {
+        display: grid;
+
+        /** TODO: 200px being hardcoded is not great - we probably want different sizes depending on
+         * screen size
+         */
+        grid-template-columns: repeat(auto-fill, 200px);
+        column-gap: 1rem;
+      }`;
 }

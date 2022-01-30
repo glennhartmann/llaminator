@@ -28,10 +28,6 @@ export class LlamaItem extends LitElement {
   @property({ type: Object }) storage?: Promise<LlamaStorage>;
   @property({ type: String }) src: string = '';
 
-  // No internal behaviour is necessary for the item, so avoid creating an
-  // open shadow root for this component and default to global styles instead.
-  createRenderRoot() { return this; }
-
   async shareItem() {
     if (!this.storage) {
       console.warn('Unable to share this item: @storage property not set.');
@@ -79,6 +75,10 @@ export class LlamaItem extends LitElement {
 
   render() {
     return html`
+      <!-- NOTE: including external assets here increases FOUC -->
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" />
+      <link rel="stylesheet" href="/llaminator.css" />
       <div class="mdc-card">
         <div class="mdc-card__primary-action">
           <div class="mdc-card__media mdc-card__media--16-9 llama-card-media"

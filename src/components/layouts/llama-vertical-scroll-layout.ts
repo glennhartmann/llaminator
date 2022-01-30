@@ -32,13 +32,6 @@ export class LlamaVerticalScrollLayout extends LitElement implements LlamaLayout
   items: TemplateResult[] = [];
 
   /**
-   * This component needs an open shadow root because LlamaItem depends on it.
-   *
-   * @return {LlamaVerticalScrollLayout} The current instance.
-   */
-  createRenderRoot() { return this; }
-
-  /**
    * Refreshes (ie, renders) the layout's contents from the database.
    *
    * @param {LlamaStorage} database The database of items to render.
