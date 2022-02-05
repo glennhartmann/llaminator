@@ -1,0 +1,57 @@
+{
+  "packageId": "app.netlify.llaminator_dev.twa",
+  "host": "llaminator-dev.netlify.app",
+  "name": "Llaminator",
+  "launcherName": "Llaminator",
+  "display": "standalone",
+  "themeColor": "#E91E63",
+  "navigationColor": "#000000",
+  "navigationColorDark": "#000000",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#FFC400",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "https://llaminator-dev.netlify.app/icon.png",
+  "maskableIconUrl": "https://llaminator-dev.netlify.app/icon.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "/home/glenn/llaminator.keystore",
+    "alias": "llaminator"
+  },
+  "appVersionName": "1",
+  "appVersionCode": 1,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://llaminator-dev.netlify.app/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "shareTarget": {
+    "action": "https://llaminator-dev.netlify.app/share-target",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "url": "url",
+      "text": "text",
+      "files": [
+        {
+          "name": "image",
+          "accept": [
+            "image/*"
+          ]
+        }
+      ]
+    }
+  },
+  "orientation": "default",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "appVersion": "1"
+}
