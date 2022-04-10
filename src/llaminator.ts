@@ -38,10 +38,6 @@ interface LlaminatorElements {
   select: LlamaSelectFab;
 }
 
-interface Layout {
-  refresh(database: LlamaStorage): void;
-}
-
 /**
  * Main class of the Llaminator application, which encapsulates the main functionality of the app.
  * Is given a series of HTML elements (`LlaminatorElements`) in which the app is to be rendered.
