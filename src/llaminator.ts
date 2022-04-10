@@ -16,6 +16,7 @@
 
 import { render } from 'lit-html';
 
+import { type LlamaLayout } from './llama-layout';
 import { type LlamaSelectFab } from './components/llama-select-fab';
 import { LlamaStorage } from './storage';
 import { LlamaThumbnailGridLayout } from './components/layouts/llama-thumbnail-grid-layout';
@@ -48,7 +49,7 @@ interface Layout {
 export class Llaminator {
   private readonly elements: LlaminatorElements;
   private readonly storage: Promise<LlamaStorage>;
-  private readonly layout: Layout;
+  private readonly layout: LlamaLayout;
 
   /**
    * Constructs a Llaminator instance.
@@ -88,8 +89,8 @@ export class Llaminator {
       container.firstChild.remove();
     }
 
-    render(this.layout, this.elements.container);
     this.layout.refresh(await this.storage);
+    render(this.layout, this.elements.container);
   }
 
   /**

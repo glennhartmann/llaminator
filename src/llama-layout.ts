@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Google Inc. All Rights Reserved.
+ * Copyright 2022 Google Inc. All Rights Reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,26 +14,16 @@
  *  limitations under the License.
  */
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+import { LlamaStorage } from './storage';
 
-html {
-  --mdc-theme-primary: #e91e63;
-  --mdc-theme-secondary: #ffc400;
-  background-color: #FAFAFA;
-}
-
-html, body {
-  width: 100%;
-  height: 100%;
-}
-
-main {
-  padding: 2rem;
-
-  /** TODO: Use the variable available in the @material/top-app-bar package? */
-  padding-top: calc(2rem + 64px) !important;
+/**
+ * For components that define the overall layout of items on the page.
+ */
+export interface LlamaLayout {
+  /**
+   * Refreshes (ie, renders) the layout's contents from the database.
+   *
+   * @param {LlamaStorage} database The database of items to render.
+   */
+  refresh(database: LlamaStorage): void;
 }
