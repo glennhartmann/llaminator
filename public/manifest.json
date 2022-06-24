@@ -13,6 +13,24 @@
   "background_color": "#ffc400",
   "display": "standalone",
   "theme_color": "#e91e63",
+  "description": "Llaminator is an installable, fully offline-enabled PWA that helps you conveniently store and easily access images directly from your browser, desktop, or home screen.",
+  "screenshots": [
+    {
+      "src": "screenshots/android-splash.png",
+      "sizes": "540x1200",
+      "type": "image/png"
+    },
+    {
+      "src": "screenshots/android-content.png",
+      "sizes": "540x1200",
+      "type": "image/png"
+    },
+    {
+      "src": "screenshots/windows.png",
+      "sizes": "540x1200",
+      "type": "image/png"
+    }
+  ],
   "share_target": {
     "action": "share-target",
     "method": "POST",
