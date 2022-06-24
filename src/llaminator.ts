@@ -16,7 +16,7 @@
 
 import { render } from 'lit-html';
 
-import { easterEggs } from './easter-basket';
+import { kEasterEggs } from './easter-basket';
 import { type LlamaLayout } from './llama-layout';
 import { type LlamaSelectFab } from './components/llama-select-fab';
 import { LlamaStorage } from './storage';
@@ -102,8 +102,8 @@ export class Llaminator {
     const file = (event as CustomEvent).detail as File;
     const blob = new Blob([await file.arrayBuffer()], { type: file.type });
 
-    for (let i = 0; i < easterEggs.length; i++) {
-      const res = await easterEggs[i].hunt(blob);
+    for (const egg of kEasterEggs) {
+      const res = await egg.hunt(blob);
       if (res === false) {
         return;
       }
